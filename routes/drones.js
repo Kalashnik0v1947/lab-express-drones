@@ -1,36 +1,74 @@
 const express = require('express');
 const router = express.Router();
 
-// require the Drone model here
+const Drone = require("../models/Drone.model");
 
 router.get('/drones', (req, res, next) => {
-  // Iteration #2: List the drones
-  // ... your code here
+  Drone.find()
+  .then((allDrones)=>{
+    res.render("../views/drones/list",{drones: allDrones})
+  })
+  .catch(err=>{
+    console.log("Something went wrong", err)
+  })
 });
 
 router.get('/drones/create', (req, res, next) => {
-  // Iteration #3: Add a new drone
-  // ... your code here
+  res.render("drones/create-form")
 });
 
 router.post('/drones/create', (req, res, next) => {
-  // Iteration #3: Add a new drone
-  // ... your code here
+  Drone.create({
+    name: req.body.name,
+    propellers: req.body.propellers,
+    maxSpeed: req.body.maxSpeed,
+    image: req.body.image,
+  })
+  .then((results)=>{
+    res.redirect("/drones")
+  }).catch(err=>{
+    console.log("Something went wrong", err)
+  })
 });
 
 router.get('/drones/:id/edit', (req, res, next) => {
-  // Iteration #4: Update the drone
-  // ... your code here
+Drone.findById(req.params.id)
+.then((found)=>{
+  res.render("drones/update-form", {  
+    name: found.name,
+    propellers:found.propellers,
+    maxSpeed: found.maxSpeed,
+    image: found.image,
+    _id: found._id})
+})
+.catch(err=>{
+  console.log("Something went wrong", err)
+})
 });
 
 router.post('/drones/:id/edit', (req, res, next) => {
-  // Iteration #4: Update the drone
-  // ... your code here
+  Drone.findByIdAndUpdate(req.params.id,{
+    name: req.body.name,
+    propellers: req.body.propellers,
+    maxSpeed: req.body.maxSpeed,
+  })
+  .then(()=>{
+    res.redirect("/drones")
+  })
+  .catch(err=>{
+    console.log("Something went wrong", err)
+  })
 });
 
 router.post('/drones/:id/delete', (req, res, next) => {
-  // Iteration #5: Delete the drone
-  // ... your code here
-});
+  Drone.findByIdAndDelete(req.params.id)
+  .then((destroyed)=>{
+    console.log("destroyed drone",destroyed )
+    res.redirect('/drones')
+  })
+  .catch(err=>{
+    console.log("Something went wrong:", err)
+  })
+})
 
 module.exports = router;

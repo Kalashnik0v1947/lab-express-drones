@@ -1,1 +1,41 @@
 <h2>Update the drone</h2>
+
+
+<form method="POST" action="/drones/{{this._id}}/edit">
+
+<div>
+    <input type="text" name="name" value="{{name}}" autocomplete="off">
+    <input type="number" name="propellers" value={{propellers}}>
+    <input type="number" name="maxSpeed" value={{maxSpeed}}>
+    <input type="text" name="image" value={{image}}>
+
+
+    <button type="submit">Update Drone</button>
+</div>
+</form>
+
+
+<style>
+
+    div{
+
+        display: flex;
+        flex-direction: column;
+  
+    }
+
+
+</style>
+
+<style>
+    img{
+        width: 150px;
+    }
+
+    html{
+        background-image: url({{this.image}});
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+</style>
